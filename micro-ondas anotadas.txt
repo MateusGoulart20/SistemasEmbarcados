@@ -1,0 +1,61 @@
+led - enerergizado
+led - (ligar Magnetron)
+led - (ligar prato giratório)
+led - working
+
+ldr - porta aberta / fechada
+btt - heat: (low/medium/high) 3led? to megatron
+btt - start/stop interrupt working
+
+btt - manual onoff
+btt - manual heat?
+
+total:
+3 bttm 
+1 ldr 
+4+3 led
+
+
+
+
+while [true]
+
+// configs bottoms
+press heat {
+delay: 1s
+heat++ 
+if heat = 4 ) {
+	heat = 1;
+}}
+
+
+switch heat: 
+on low, off médium, off high
+on low, on médium, off high
+on low, on médium, on high
+
+
+// working
+if (read interrupt && manual == off){ 
+	delay: 1s para despressioanr o botão
+	while ( 
+	door == close &&
+	time > 0 &&
+	read !interrupt
+	)  {
+		delay: 1s
+		time--
+	}
+	heat=1;
+}
+
+if (read interrupt && manual == on){
+	delay: 1s
+	while (
+	door = close &&
+	read !interrupt
+	){
+	delay: 1s
+	}
+}
+[.]
