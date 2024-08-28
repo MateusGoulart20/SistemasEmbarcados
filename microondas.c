@@ -60,7 +60,7 @@ void setup() {
     time_sleep(1); // Espera de 1 segundo
 }
 
-void piscante(){
+void funcionando(){
     gpioWrite(FUNCIONANDO, PI_LOW);
     time_sleep(0.5);
     gpioWrite(FUNCIONANDO, PI_HIGH);
