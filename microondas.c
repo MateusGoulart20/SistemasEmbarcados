@@ -147,6 +147,7 @@ void main_loop() {
             }
             desligar();
             heat=1;
+            time_sleep(1);
         }
 
 
@@ -155,9 +156,10 @@ void main_loop() {
             time_sleep(1);
             ligar();
             while( gpioRead(PORTA) && !gpioRead(INTERRUPTOR) ){
-                funcionando(1);
+                funcionando();
             }
             desligar();
+            time_sleep(1);
         }
     }
 }
