@@ -3,10 +3,10 @@
 #include <stdbool.h>
 
 // saida genericas
-#define ENERGIZADO 1 // pode ser substituido por ligacao direta no vcc
 #define MAGNETRON 5
 #define PRATOGIRANDO 6
 #define FUNCIONANDO 13
+#define MANUAL 19 // pode ser substituido por ligacao direta no vcc
 // saidas temperatura
 #define TLOW 17
 #define TMEDIUM 27
@@ -36,7 +36,7 @@ void setup() {
     gpioSetPullUpDown(PORTA, PI_PUD_DOWN);
 
     // Configuração dos LEDs como saídas
-    gpioSetMode(ENERGIZADO, PI_OUTPUT);
+    gpioSetMode(MANUAL, PI_OUTPUT);
     gpioSetMode(MAGNETRON, PI_OUTPUT);
     gpioSetMode(PRATOGIRANDO, PI_OUTPUT);
     gpioSetMode(FUNCIONANDO, PI_OUTPUT);
@@ -46,7 +46,7 @@ void setup() {
     gpioSetMode(THIGH, PI_OUTPUT);
 
     // Inicializa os LEDs como desligados
-    gpioWrite(ENERGIZADO, PI_HIGH);
+    gpioWrite(MANUAL, PI_LOW);
     gpioWrite(MAGNETRON, PI_LOW);
     gpioWrite(PRATOGIRANDO, PI_LOW);
     gpioWrite(FUNCIONANDO, PI_LOW);
@@ -85,6 +85,11 @@ void main_loop() {
             while (gpioRead(MANUALIDADE)) time_sleep(0.001);
         }
         
+        if(MANUAL){
+            gpioWrite(MANUAL, PI_HIGH);
+        }else{
+            gpioWrite(MANUAL, PI_LOW);
+        }
         switch (heat) // configuracao da temperatura
         {
         case 1:
