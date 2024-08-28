@@ -60,13 +60,6 @@ void setup() {
     time_sleep(1); // Espera de 1 segundo
 }
 
-void funcionando(){
-    gpioWrite(FUNCIONANDO, PI_LOW);
-    time_sleep(0.5);
-    gpioWrite(FUNCIONANDO, PI_HIGH);
-    time_sleep(0.5);
-}
-
 void ligar(){
     gpioWrite(MAGNETRON, PI_HIGH);
     gpioWrite(PRATOGIRANDO, PI_HIGH);
@@ -83,6 +76,7 @@ void main_loop() {
     bool manual_on_off = false;
     int heat = 1;
     int time = 0;
+    bool pisca = false;
     while (1) {
         time_sleep(0.1);
 
@@ -135,17 +129,25 @@ void main_loop() {
             time_sleep(1);
             ligar();
             switch (heat){ // selecionando tempo de acordo com a temperatura.
-                case 1: time=12; break;
-                case 2: time=18; break;
-                case 3: time=24; break;
+                case 1: time=24; break;
+                case 2: time=36; break;
+                case 3: time=28; break;
                 default: break;
             }
             while ( gpioRead(PORTA) && (time>0) && !gpioRead(INTERRUPTOR) )
             {
-                funcionando();
-                time--;
+                if(pisca){
+                    gpioWrite(FUNCIONANDO, PI_LOW);
+                    pisca=false;
+                }else{
+                    gpioWrite(FUNCIONANDO, PI_HIGH);
+                    pisca=true;
+                }
+                time_sleep(0.5);
+                time--; // passo 0.5s
             }
             desligar();
+            pisca=false;
             heat=1;
             time_sleep(1);
         }
@@ -156,9 +158,18 @@ void main_loop() {
             time_sleep(1);
             ligar();
             while( gpioRead(PORTA) && !gpioRead(INTERRUPTOR) ){
-                funcionando();
+                 if(pisca){
+                    gpioWrite(FUNCIONANDO, PI_LOW);
+                    pisca=false;
+                }else{
+                    gpioWrite(FUNCIONANDO, PI_HIGH);
+                    pisca=true;
+                }
+                time_sleep(0.5);
+                time--; // passo 0.5s
             }
             desligar();
+            pisca=false;
             time_sleep(1);
         }
     }
